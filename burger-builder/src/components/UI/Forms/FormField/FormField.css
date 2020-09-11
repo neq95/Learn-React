@@ -1,0 +1,28 @@
+.form-field {
+  text-align: left;
+}
+
+.form-field__label {
+  font-weight: bold;
+}
+
+.form-field__content {
+  font-size: 18px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background-color: #b99b70;
+  color: #fff;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.form-field__content::placeholder {
+  color: #fff;
+}
+
+.form-field__required {
+  font-size: 18px;
+  color: #f13d35;
+}

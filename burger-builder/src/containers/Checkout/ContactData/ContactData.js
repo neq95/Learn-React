@@ -1,25 +1,67 @@
 import React from "react";
 
 import Button from "../../../components/UI/Button/Button";
-import Fieldset from "../../../components/UI/Forms/Fieldset/Fieldset";
 import ordersAjax from "../../../utils/ajax-requests/orders-ajax";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import withError from "../../../hoc/withError";
+import FormField from "../../../components/UI/Forms/FormField/FormField";
 import "./ContactData.css";
 
 class ContactData extends React.Component {
   state = {
     formData: {
-      customer: {
-        name: "",
-        address: {
-          city: "",
-          street: "",
-          house: ""
-        },
-        email: "",
+      name: {
+        value: "",
+        fieldType: "input",
+        placeholder: "Enter your name",
+        label: "Name",
+        required: true
       },
-      deliveryMethod: "slowest",
+      email: {
+        value: "",
+        fieldType: "input",
+        placeholder: "Enter your email",
+        label: "Email",
+        required: true
+      },
+      city: {
+        value: "",
+        fieldType: "input",
+        placeholder: "City",
+        label: "City",
+        required: true
+      },
+      street: {
+        value: "",
+        fieldType: "input",
+        placeholder: "Street",
+        label: "Street",
+        required: true
+      },
+      house: {
+        value: "",
+        fieldType: "input",
+        placeholder: "№ House",
+        label: "House",
+        required: true
+      },
+      postCode: {
+        value: "",
+        fieldType: "input",
+        placeholder: "Enter your post code",
+        label: "Post Code",
+        required: false
+      },
+      deliveryMethod: {
+        value: "fastest",
+        fieldType: "select",
+        label: "Delivery Method",
+        required: false,
+        options: {
+          cheapest: "Cheapest",
+          fastest: "Fastest"
+        }
+      },
     },
     loading: false,
     submitted: false
@@ -49,52 +91,47 @@ class ContactData extends React.Component {
       .finally(() => this.setState({loading: false}))
   }
 
+  inputChangeHandler = (event) => {
+    let formData = {...this.state.formData};
+    formData[event.target.name].value = event.target.value;
+
+    this.setState({formData});
+  }
+
   render() {
     let formData = this.state.formData;
 
     let content = <Spinner />;
     if(!(this.state.loading || this.state.submitted)) {
+      let fields = Object.entries(formData).map(el => {
+        return (
+          <FormField 
+            key={el[0]} 
+            config={
+              {
+                name: el[0], 
+                changed: this.inputChangeHandler, 
+                ...el[1],
+                className: "contact-data__form-field"
+              }
+            }
+          />
+        )
+      })
+
       content = (
         <React.Fragment>
           <h3 className="contact-data__title">Enter your contact data</h3>
           <form className="contact-data__form">
-            <Fieldset legend="Person data" className="contact-data__fieldset">
-              <input 
-                type="text" 
-                autoComplete="off" 
-                className="contact-data__input" 
-                name="name" 
-                placeholder="Your name"
-                value={formData.customer.name}
-              />
-              <input 
-                type="text"
-                autoComplete="off" 
-                className="contact-data__input" 
-                name="email" 
-                placeholder="Enter your email"
-                value={formData.customer.email}
-              />
-            </Fieldset>
-            <Fieldset legend="Address" className="contact-data__fieldset">
-              <input type="text" autoComplete="off" className="contact-data__input" name="city" placeholder="Your city" />
-              <input type="text" autoComplete="off" className="contact-data__input" name="street" placeholder="Your street" />
-              <input type="text" autoComplete="off" className="contact-data__input" name="house" placeholder="Your house" />     
-            </Fieldset>
-            <Fieldset legend="Delivery Method" className="contact-data__fieldset">
-              <select name="delivery" className="contact-data__select">
-                <option value="slowest">Slowest</option>
-                <option value="slowest">Medium</option>
-                <option value="slowest">Fastest</option>
-              </select>
-            </Fieldset>
+            {fields}
+            <Button 
+              label="Order" 
+              className="button button--order contact-data__order-button" 
+              clicked={this.orderHandler}
+              disabled={this.state.loading ? true : false}
+              type="submit"
+            />
           </form>
-          <Button 
-            label="Order" 
-            className="button button--order contact-data__order-button" 
-            clicked={this.orderHandler}
-            disabled={this.state.loading ? true : false}
-          />
         </React.Fragment>
       )
     } else if(!this.state.loading) {

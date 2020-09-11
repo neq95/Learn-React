@@ -13,30 +13,24 @@
   font-size: 28px;
 }
 
+.contact-data__form {
+  margin-top: 30px;
+}
+
 .contact-data__order-button {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
-.contact-data__fieldset {
-  margin-top: 20px;
-  border: 2px solid #b08f5e;
+.contact-data__form-field {
+  margin: 15px auto 0 auto;
+  width: 80%;
 }
 
-.contact-data__fieldset .contact-data__input {
-  margin-top: 15px;
-}
-
-.contact-data__fieldset .contact-data__input:first-of-type {
+.contact-data__form-field:first-child {
   margin-top: 0;
 }
 
-.contact-data__input {
-  display: block;
-  width: 80%;
-  margin: 0 auto;
-  font-size: 18px;
-  padding: 5px 8px;
-  border-radius: 5px;
+/* .contact-data__input {
   border: none;
   outline: none;
   background-color: #b08f5e;
@@ -55,7 +49,7 @@
   color: #fff;
   border: 1px solid #9c7c4d;
   outline: none;
-}
+} */
 
 .contact-data__submitted {
   font-size: 22px;

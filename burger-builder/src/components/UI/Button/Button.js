@@ -8,6 +8,7 @@ const Button = (props) => {
       onClick={props.clicked}
       className={props.className}
       disabled={props.disabled}
+      type={props.type ? props.type : "button"}
     >
       {props.label}
     </button>
