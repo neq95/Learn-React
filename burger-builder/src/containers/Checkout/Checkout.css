@@ -1,0 +1,17 @@
+.checkout {
+  width: 50%;
+}
+
+.checkout__buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.checkout__buttons button {
+  margin-right: 15px;
+}
+
+.checkout__buttons button:last-of-type {
+  margin-right: 0;
+}

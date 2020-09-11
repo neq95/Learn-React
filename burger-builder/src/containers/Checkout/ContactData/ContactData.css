@@ -1,0 +1,63 @@
+.contact-data {
+  margin: 50px auto 0 auto;
+  background-color: #F3DEBF;
+  padding: 30px 30px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.85);
+  border-radius: 10px;
+  border: 2px solid #b08f5e;
+  width: 70%;
+}
+
+.contact-data__title {
+  font-size: 28px;
+}
+
+.contact-data__order-button {
+  margin-top: 20px;
+}
+
+.contact-data__fieldset {
+  margin-top: 20px;
+  border: 2px solid #b08f5e;
+}
+
+.contact-data__fieldset .contact-data__input {
+  margin-top: 15px;
+}
+
+.contact-data__fieldset .contact-data__input:first-of-type {
+  margin-top: 0;
+}
+
+.contact-data__input {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  font-size: 18px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background-color: #b08f5e;
+  color: #fff;
+}
+
+.contact-data__input::placeholder {
+  color: #fff;
+}
+
+.contact-data__select {
+  width: 80%;
+  font-size: 18px;
+  padding: 5px 8px;
+  background-color: #b08f5e;
+  color: #fff;
+  border: 1px solid #9c7c4d;
+  outline: none;
+}
+
+.contact-data__submitted {
+  font-size: 22px;
+  font-weight: bold;
+}

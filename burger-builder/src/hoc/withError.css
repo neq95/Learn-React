@@ -1,0 +1,26 @@
+.error-message {
+  position: relative;
+}
+
+.error-message__content {
+  font-size: 20px;
+  padding-top: 15px;
+}
+
+.error-message__button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border: none;
+  outline: none;
+}
+
+.fa-times-circle {
+  font-size: 18px;
+  color: #a71b09;
+  cursor: pointer;
+}
+
+.fa-times-circle:hover {
+  color: #f44e39;
+}

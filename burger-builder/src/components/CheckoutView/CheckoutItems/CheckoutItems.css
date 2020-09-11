@@ -1,0 +1,8 @@
+.checkout-items__item {
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  padding: 30px 0;
+}
+
+.checkout-items__item:first-of-type {
+  border-top: 1px solid rgba(0,0,0,0.3);
+}

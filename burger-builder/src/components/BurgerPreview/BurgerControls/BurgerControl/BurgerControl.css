@@ -1,0 +1,67 @@
+.burger-control {
+  display: flex;
+  font-size: 20px;
+  justify-content: space-between;
+  font-weight: bold;
+  align-items: center;
+  margin-bottom: 10px;
+  max-width: 300px;
+}
+
+.burger-control:last-of-type {
+  margin-bottom: 0;
+}
+
+.burger-control__button {
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  outline: none;
+}
+
+.burger-control__button:disabled {
+  background-color: #ccc;
+  border: 1px solid rgba(0,0,0,0.4);
+  cursor: not-allowed;
+}
+
+.burger-control__button--reduce {
+  background-color: #c9504e;
+  border: 1px solid #a03331;
+}
+
+.burger-control__button--add {
+  background-color: #54c497;
+  border: 1px solid #308b67;
+}
+
+.burger-control__side--left {
+  text-align: left;
+}
+
+.burger-control__side--right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.burger-control__quantity {
+  width: 30px;
+  text-align: center;
+  display: inline-block;
+}
+
+@media(min-width: 900px) and (min-height: 450px) {
+  .burger-control {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .burger-control__button {
+    width: 40px;
+    height: 40px;
+  }
+}

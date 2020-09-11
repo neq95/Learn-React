@@ -1,0 +1,9 @@
+.fieldset {
+  padding: 10px 15px;
+}
+
+.fieldset__legend {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}

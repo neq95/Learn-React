@@ -1,0 +1,52 @@
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  align-items: center;
+}
+
+.checkout-item__name {
+  flex: 1 1 40%;
+}
+
+.ckeckout-item__counter {
+  border: 1px solid rgba(0,0,0,0.3);
+  border-radius: 5px;
+  font-size: 18px;
+  width: 120px;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  flex: 1 1 25%;
+}
+
+.checkout-counter__control {
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+}
+
+.checkout-item__price {
+  flex: 1 1 25%;
+  text-align: center;
+}
+
+.checkout-item__delete {
+  flex: 1 1 10%;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: right;
+}
+
+.checkout-item__delete:hover {
+  color: red;
+}
+
+.checkout-counter__control:active {
+  transform: scale(1.2);
+}

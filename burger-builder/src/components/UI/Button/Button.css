@@ -1,0 +1,49 @@
+.button {
+  padding: 10px 15px;
+  font-size: 18px;
+  outline: none;
+  border-radius: 10px;
+  width: 170px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.button--cancel {
+  background-color: #868ab2;
+  border: 1px solid #535782;
+}
+
+.button--cancel:hover, 
+.button--cancel:focus {
+  background-color: #a4a7c5;
+  box-shadow: 0 0 7px 4px #a4a7c5;
+}
+
+.button--submit {
+  background-color: #80b071;
+  border: 1px solid #5b8a4c;
+}
+
+.button--submit:hover, 
+.button--submit:focus {
+  background-color: #9cc190;
+  box-shadow: 0 0 7px 4px #9cc190;
+}
+
+.button--order {
+  background-color: #b08f5e;
+  color: #fff;
+  border: 1px solid #9d7d4d;
+}
+
+.button--order:hover,
+.button--order:focus {
+  background-color: #b29262;
+  box-shadow: 0 0 7px 4px #bda279;
+}
+
+.button:disabled {
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  box-shadow: none;
+}
