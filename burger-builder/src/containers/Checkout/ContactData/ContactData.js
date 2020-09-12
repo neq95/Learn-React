@@ -15,51 +15,78 @@ class ContactData extends React.Component {
         fieldType: "input",
         placeholder: "Enter your name",
         label: "Name",
-        required: true
+        validation: {
+          required: true,
+          isValid: false,
+          regexString: "^[a-z]{3,}"
+        }
       },
       email: {
         value: "",
         fieldType: "input",
         placeholder: "Enter your email",
         label: "Email",
-        required: true
+        validation: {
+          required: true,
+          isValid: false,
+          regexString: "^.+@[a-z]+\\.(com|ru)$"
+        }
       },
       city: {
         value: "",
         fieldType: "input",
         placeholder: "City",
         label: "City",
-        required: true
+        validation: {
+          required: true,
+          isValid: false,
+          regexString: "^[a-z]{3,}"
+        }
       },
       street: {
         value: "",
         fieldType: "input",
         placeholder: "Street",
         label: "Street",
-        required: true
+        validation: {
+          required: true,
+          isValid: false,
+          regexString: "^[a-z]{3,}"
+        }
       },
       house: {
         value: "",
         fieldType: "input",
         placeholder: "№ House",
         label: "House",
-        required: true
+        validation: {
+          required: true,
+          isValid: false,
+          regexString: "^\\d+[a-z]{0,2}$"
+        }
       },
       postCode: {
         value: "",
         fieldType: "input",
         placeholder: "Enter your post code",
         label: "Post Code",
-        required: false
+        validation: {
+          required: false,
+          isValid: true,
+          regexString: "^\\d{6,6}$"
+        }
       },
       deliveryMethod: {
         value: "fastest",
         fieldType: "select",
         label: "Delivery Method",
-        required: false,
         options: {
           cheapest: "Cheapest",
           fastest: "Fastest"
+        },
+        validation: {
+          required: false,
+          isValid: true
         }
       },
     },
@@ -72,7 +99,7 @@ class ContactData extends React.Component {
     clearTimeout(this.timerID);
   }
 
-  //handler for submitted form: posting data to the server and redirecting to the main page
+  //Handler for submitted form: posting data to the server and redirecting to the main page
   formSubmittingHandler = (event) => {
     event.preventDefault();
 
@@ -102,6 +129,19 @@ class ContactData extends React.Component {
       .finally(() => this.setState({loading: false}))
   }
 
+  //Checking if value is valid
+  checkValidity(validationObject, value) {
+    let valid = validationObject.isValid;
+    
+    if(validationObject.required || validationObject.regexString) {
+      let regex = new RegExp(validationObject.regexString);
+      valid = regex.test(value);
+    }
+
+    validationObject.isValid = valid;
+    return validationObject;
+  }
+
   //React to input change and mutate state by deep cloning
   inputChangeHandler = (event) => {
     function deepClone(target) {
@@ -121,8 +161,20 @@ class ContactData extends React.Component {
     let identifier = event.target.name;
 
     let newFormData = deepClone(this.state.formData);
-    newFormData[identifier].value = event.target.value;
+    let targetField = newFormData[identifier];
+    targetField.value = event.target.value;
 
+    // let fieldValidation = newFormData[identifier].validation;
+
+    // if(fieldValidation.reqired) {
+    //   let valid = fieldValidation.checkValidity(event.target.value);
+
+    // }
+
+    let validation = this.checkValidity(targetField.validation, targetField.value);
+    targetField.validation = validation;
+
+    console.log(targetField);
     this.setState({formData: newFormData});
   }
 

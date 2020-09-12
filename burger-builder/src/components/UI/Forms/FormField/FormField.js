@@ -15,7 +15,7 @@ const FormField = (props) => {
           autoComplete="off"
           value={props.config.value}
           onChange={props.config.changed}
-          required={props.config.required}
+          required={props.config.validation?.required}
           id={props.config.name}
         />
       break;
@@ -29,7 +29,7 @@ const FormField = (props) => {
           className="form-field__content"
           value={props.config.value}
           onChange={props.config.changed}
-          required={props.config.required}
+          required={props.config.validation?.required}
         >
           {options}
         </select>
@@ -43,7 +43,7 @@ const FormField = (props) => {
     <div className={`form-field ${props.config.className ? props.config.className : ""}`}>
       <label htmlFor={props.config.name} className="form-field__label">
         {props.config.label}
-        {props.config.required ? <sup className="form-field__required">*</sup> : null}
+        {props.config.validation?.required ? <sup className="form-field__required">*</sup> : null}
       </label>
       {field}
     </div>
