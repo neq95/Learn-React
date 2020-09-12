@@ -22,6 +22,18 @@
   color: rgba(255,255,255,0.6)
 }
 
+.form-field__content.invalid:not(:placeholder-shown) {
+  background-color: #bb5244;
+}
+
+.form-field__error {
+  display: none;
+}
+
+.form-field__content.invalid:not(:placeholder-shown) + .form-field__error {
+  display: block;
+  color: #f13d35;
+}
 .form-field__required {
   font-size: 18px;
   color: #f13d35;

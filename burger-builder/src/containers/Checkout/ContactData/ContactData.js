@@ -18,7 +18,8 @@ class ContactData extends React.Component {
         validation: {
           required: true,
           isValid: false,
-          regexString: "^[a-z]{3,}"
+          regexString: "^[a-zа-я]{3,}",
+          errorMessage: "Name must have at least 3 symbols"
         }
       },
       email: {
@@ -29,7 +30,8 @@ class ContactData extends React.Component {
         validation: {
           required: true,
           isValid: false,
-          regexString: "^.+@[a-z]+\\.(com|ru)$"
+          regexString: "^.+@[a-z]+\\.(com|ru)$",
+          errorMessage: "Email must have symbol '@' and .com/.ru at the end"
         }
       },
       city: {
@@ -40,7 +42,8 @@ class ContactData extends React.Component {
         validation: {
           required: true,
           isValid: false,
-          regexString: "^[a-z]{3,}"
+          regexString: "^[a-zа-я]{3,}",
+          errorMessage: "City name must have at least 3 symbols"
         }
       },
       street: {
@@ -51,7 +54,8 @@ class ContactData extends React.Component {
         validation: {
           required: true,
           isValid: false,
-          regexString: "^[a-z]{3,}"
+          regexString: "^[a-zа-я]{3,}",
+          errorMessage: "Street name must have at least 3 symbols"
         }
       },
       house: {
@@ -62,7 +66,8 @@ class ContactData extends React.Component {
         validation: {
           required: true,
           isValid: false,
-          regexString: "^\\d+[a-z]{0,2}$"
+          regexString: "^\\d+[a-z]{0,2}$",
+          errorMessage: "House number must starts with a digit and have maximum 2 letters"
         }
       },
       postCode: {
@@ -73,7 +78,8 @@ class ContactData extends React.Component {
         validation: {
           required: false,
           isValid: true,
-          regexString: "^\\d{6,6}$"
+          regexString: "^\\d{6,6}$",
+          errorMessage: "This field isn't required, but if you want to provide it, enter 6 digits"
         }
       },
       deliveryMethod: {
@@ -91,7 +97,8 @@ class ContactData extends React.Component {
       },
     },
     loading: false,
-    submitted: false
+    submitted: false,
+    formIsValid: false
   }
 
   //Stop redirecting after form submit if an user change the page
@@ -129,19 +136,6 @@ class ContactData extends React.Component {
       .finally(() => this.setState({loading: false}))
   }
 
-  //Checking if value is valid
-  checkValidity(validationObject, value) {
-    let valid = validationObject.isValid;
-    
-    if(validationObject.required || validationObject.regexString) {
-      let regex = new RegExp(validationObject.regexString);
-      valid = regex.test(value);
-    }
-
-    validationObject.isValid = valid;
-    return validationObject;
-  }
-
   //React to input change and mutate state by deep cloning
   inputChangeHandler = (event) => {
     function deepClone(target) {
@@ -158,24 +152,35 @@ class ContactData extends React.Component {
       return cloneTarget;
     }
 
+    //Checking is field is validity with RegExp
+    function checkValidity(validationObject, value) {
+      let valid = validationObject.isValid;
+      
+      if(validationObject.required || validationObject.regexString) {
+        let regex = new RegExp(validationObject.regexString, "i");
+        valid = regex.test(value);
+      }
+  
+      validationObject.isValid = valid;
+      return validationObject;
+    }
+
     let identifier = event.target.name;
 
     let newFormData = deepClone(this.state.formData);
     let targetField = newFormData[identifier];
+
     targetField.value = event.target.value;
 
-    // let fieldValidation = newFormData[identifier].validation;
-
-    // if(fieldValidation.reqired) {
-    //   let valid = fieldValidation.checkValidity(event.target.value);
-
-    // }
-
-    let validation = this.checkValidity(targetField.validation, targetField.value);
+    let validation = checkValidity(targetField.validation, targetField.value);
     targetField.validation = validation;
 
-    console.log(targetField);
-    this.setState({formData: newFormData});
+    let formIsValid = true;
+    for(let elem in newFormData) {
+      formIsValid = newFormData[elem].validation.isValid && formIsValid;
+    }
+
+    this.setState({formData: newFormData, formIsValid});
   }
 
   render() {
@@ -199,15 +204,17 @@ class ContactData extends React.Component {
         )
       })
 
+      let buttonDisabled = this.state.loading || !this.state.formIsValid ? true : false;
+
       content = (
         <React.Fragment>
           <h3 className="contact-data__title">Enter your contact data</h3>
-          <form className="contact-data__form" onSubmit={this.formSubmittingHandler}>
+          <form className="contact-data__form" onSubmit={this.formSubmittingHandler} ref={this.formRef}>
             {fields}
             <Button 
               label="Order" 
               className="button button--order contact-data__order-button" 
-              disabled={this.state.loading ? true : false}
+              disabled={buttonDisabled}
               type="submit"
             />
           </form>
