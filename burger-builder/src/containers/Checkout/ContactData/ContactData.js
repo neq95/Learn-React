@@ -67,22 +67,33 @@ class ContactData extends React.Component {
     submitted: false
   }
 
+  //Stop redirecting after form submit if an user change the page
   componentWillUnmount() {
     clearTimeout(this.timerID);
   }
 
-  orderHandler = (event) => {
+  //handler for submitted form: posting data to the server and redirecting to the main page
+  formSubmittingHandler = (event) => {
     event.preventDefault();
 
-    this.setState({loading: true})
+    this.setState({loading: true});
+
+    function getFormValue(target) {
+      let result = {};
+      for(let elem in target) {
+        result[elem] = target[elem].value;
+      }
+
+      return result;
+    }
 
     let body = {
       ingredients: this.props.ingredients,
       totalPrice: this.props.totalPrice,
-      customer: this.state.customer,
-      deliveryMethod: this.state.deliveryMethod
+      deliveryDetails: getFormValue(this.state.formData)
     }
 
+    //posting order details to the server
     ordersAjax.postData("/orders.json", body)
       .then(() => {
         this.setState({submitted: true});
@@ -91,11 +102,28 @@ class ContactData extends React.Component {
       .finally(() => this.setState({loading: false}))
   }
 
+  //React to input change and mutate state by deep cloning
   inputChangeHandler = (event) => {
-    let formData = {...this.state.formData};
-    formData[event.target.name].value = event.target.value;
+    function deepClone(target) {
+      if(typeof target !== "object") {
+        return target;
+      }
 
-    this.setState({formData});
+      let cloneTarget = {};
+      
+      for(let elem in target) {
+        cloneTarget[elem] = deepClone(target[elem]);
+      }
+
+      return cloneTarget;
+    }
+
+    let identifier = event.target.name;
+
+    let newFormData = deepClone(this.state.formData);
+    newFormData[identifier].value = event.target.value;
+
+    this.setState({formData: newFormData});
   }
 
   render() {
@@ -122,12 +150,11 @@ class ContactData extends React.Component {
       content = (
         <React.Fragment>
           <h3 className="contact-data__title">Enter your contact data</h3>
-          <form className="contact-data__form">
+          <form className="contact-data__form" onSubmit={this.formSubmittingHandler}>
             {fields}
             <Button 
               label="Order" 
               className="button button--order contact-data__order-button" 
-              clicked={this.orderHandler}
               disabled={this.state.loading ? true : false}
               type="submit"
             />
