@@ -18,7 +18,7 @@
   display: flex;
   justify-content: space-between;
   padding: 5px 10px;
-  flex: 1 1 25%;
+  flex: 1 1 30%;
 }
 
 .checkout-counter__control {
@@ -31,24 +31,14 @@
 }
 
 .checkout-item__price {
-  flex: 1 1 25%;
-  text-align: center;
-}
-
-.checkout-item__delete {
-  flex: 1 1 10%;
-  text-align: center;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+  flex: 1 1 30%;
   text-align: right;
-  outline: none
 }
 
-.checkout-item__delete:hover {
-  color: red;
-}
-
-.checkout-counter__control:active {
+.checkout-counter__control:not(:disabled):active {
   transform: scale(1.2);
+}
+
+.checkout-counter__control:disabled {
+  cursor: not-allowed;
 }

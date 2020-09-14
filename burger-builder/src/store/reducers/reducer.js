@@ -7,7 +7,14 @@ const initialState = {
     bacon: 0,
     salad: 0
   },
-  totalPrice: 2.1
+  totalPrice: 2.1,
+  disabledButtons: {
+    meat: true,
+    cheese: true,
+    bacon: true,
+    salad: true
+  },
+  purchaseState: false
 }
 
 const INGREDIENTS_PRICE = {
@@ -15,6 +22,12 @@ const INGREDIENTS_PRICE = {
   cheese: 0.7,
   meat: 1.6,
   bacon: 1
+}
+
+//Helper function to check if there is at least 1 ingredient
+function checkPurchaseState(ingredients) {
+  let result = Object.values(ingredients).reduce((sum, value) => sum + value);
+  return result > 0;
 }
 
 const reducer = (state = initialState, action) => {
@@ -34,9 +47,16 @@ const reducer = (state = initialState, action) => {
         totalPrice -=  INGREDIENTS_PRICE[ingredientType];
       }
 
+      let disabledButtons = {...state.disabledButtons};
+      for(let element in ingredients) {
+        disabledButtons[element] = ingredients[element] <= 0;
+      }
+
       return {
         ingredients,
-        totalPrice: Math.round(totalPrice * 100) / 100
+        totalPrice: Math.round(totalPrice * 100) / 100,
+        disabledButtons,
+        purchaseState: checkPurchaseState(ingredients)
       };
 
     default:

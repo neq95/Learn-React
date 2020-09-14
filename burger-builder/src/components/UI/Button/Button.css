@@ -30,6 +30,16 @@
   box-shadow: 0 0 7px 4px #9cc190;
 }
 
+.button:disabled {
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.button--submit:disabled {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
 .button--order {
   background-color: #b08f5e;
   color: #fff;
@@ -42,10 +52,8 @@
   box-shadow: 0 0 7px 4px #bda279;
 }
 
-.button:disabled {
+.button--order:disabled {
   background-color: rgba(255, 255, 255, 0.7);
   border: 1px solid #bda279;
   color: #bda279;
-  cursor: not-allowed;
-  box-shadow: none;
 }

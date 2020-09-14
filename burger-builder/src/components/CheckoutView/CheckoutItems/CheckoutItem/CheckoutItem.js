@@ -16,23 +16,12 @@ const CheckoutItem = (props) => {
           addClassName="checkout-counter__control"
           add={() => props.addIngredient(name)}
           reduce={() => props.removeIngredient(name)}
+          disabled={props.disabledButtons}
         />
       </div>
-      <div className="checkout-item__price">{toFixed(props.price * quantity)}</div>
-      <button className="checkout-item__delete">
-        <i className="fas fa-trash"></i>
-      </button>
+      <div className="checkout-item__price">{(props.price * quantity).toFixed(2)}</div>
     </div>
   )
-}
-
-function toFixed(number) {
-  return number.toFixed(2);
-}
-
-function capitalize(value) {
-  value = typeof value === "string" ? value : value.toString();
-  return value.substring(0, 1).toUpperCase() + value.substring(1);
 }
 
 export default CheckoutItem

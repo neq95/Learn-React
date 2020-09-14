@@ -28,11 +28,6 @@ class BurgerBuilder extends React.Component {
   //     });
   // }
 
-  checkPurchaseState = () => {
-    let result = Object.values(this.props.ingredients).reduce((sum, value) => sum + value);
-    return result > 0;
-  }
-
   changeModalHandler = () => {
     this.setState(state => ({showModal: !state.showModal}));
   }
@@ -51,12 +46,6 @@ class BurgerBuilder extends React.Component {
 
     if(Object.keys(ingredients).length === 0) {
       return <Spinner />
-    }
-
-    let disabledButtons = {...ingredients};
-
-    for(let element in disabledButtons) {
-      disabledButtons[element] = disabledButtons[element] <= 0;
     }
 
     let orderSummary = <Spinner />;
@@ -81,9 +70,9 @@ class BurgerBuilder extends React.Component {
           addIngredient={this.props.addIngredientHandler}
           removeIngredient={this.props.removeIngredientHandler}
           ingredients={ingredients}
-          disabled={disabledButtons}
+          disabled={this.props.disabledButtons}
           price={totalPrice}
-          purchasable={this.checkPurchaseState()}
+          purchasable={this.props.purchasable}
           addModal={this.changeModalHandler}/>
       </React.Fragment>
     )
@@ -93,7 +82,9 @@ class BurgerBuilder extends React.Component {
 const mapStateToProps = (state) => {
   return {
     ingredients: state.ingredients,
-    totalPrice: state.totalPrice
+    totalPrice: state.totalPrice,
+    disabledButtons: state.disabledButtons,
+    purchasable: state.purchaseState
   }
 }
 

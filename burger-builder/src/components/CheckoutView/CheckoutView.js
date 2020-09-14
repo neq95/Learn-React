@@ -12,6 +12,7 @@ const CheckoutView = (props) => {
         ingredientsPrice={props.ingredientsPrice}
         addIngredient={props.addIngredient}
         removeIngredient={props.removeIngredient}
+        disabledButtons={props.disabledButtons}
       />
       <div className="checkout-view__summary">
         Summary: <span className="checkout-view__total-price">{props.totalPrice}</span>

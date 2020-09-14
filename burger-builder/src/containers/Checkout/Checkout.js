@@ -29,6 +29,7 @@ class Checkout extends React.Component {
           ingredientsPrice={this.props.ingredientsPrice}
           addIngredient={this.props.addIngredientHandler}
           removeIngredient={this.props.removeIngredientHandler}
+          disabledButtons={this.props.disabledButtons}
         />
         <div className="checkout__buttons">
           <Button 
@@ -40,6 +41,7 @@ class Checkout extends React.Component {
             label="Submit" 
             className="button button--submit"
             clicked={this.submitHandler}
+            disabled={!this.props.purchasable}
           />
         </div>
         <Route 
@@ -54,7 +56,9 @@ class Checkout extends React.Component {
 const mapStateToProps = (state) => {
   return {
     ingredients: state.ingredients,
-    totalPrice: state.totalPrice
+    totalPrice: state.totalPrice,
+    disabledButtons: state.disabledButtons,
+    purchasable: state.purchaseState
   }
 }
 
