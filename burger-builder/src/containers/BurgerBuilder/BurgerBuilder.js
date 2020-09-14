@@ -12,7 +12,6 @@ import * as actions from "../../store/actions/actions";
 
 class BurgerBuilder extends React.Component {
   state = {
-    purchaseState: false,
     showModal: false,
     loading: false,
     error: false
@@ -29,61 +28,22 @@ class BurgerBuilder extends React.Component {
   //     });
   // }
 
-  // checkPurchaseState = ingredients => {
-  //   let result = Object.values(ingredients).reduce((sum, value) => sum + value);
-  //   return result > 0;
-  // }
-
-  // addIngredientHandler = type => {
-  //   let ingredients = { ...this.state.ingredients};
-  //   ingredients[type]++;
-
-  //   let totalPrice = this.state.totalPrice;
-  //   totalPrice += this.props.ingredientCost[type];
-
-  //   let purchaseState = this.checkPurchaseState(ingredients);
-  
-  //   this.setState({ingredients, 
-  //     totalPrice: Math.round(totalPrice * 100) / 100, 
-  //     purchaseState})
-  // }
-
-  // removeIngredientHandler = type => {
-  //   let ingredients = {...this.state.ingredients};
-  //   if(ingredients[type] === 0) return;
-
-  //   let totalPrice = this.state.totalPrice;
-  //   ingredients[type]--;
-  //   totalPrice -= this.props.ingredientCost[type];
-
-  //   let purchaseState = this.checkPurchaseState(ingredients);
-
-  //   this.setState({ingredients, 
-  //     totalPrice: Math.round(totalPrice * 100) / 100,
-  //     purchaseState});
-  // }
+  checkPurchaseState = () => {
+    let result = Object.values(this.props.ingredients).reduce((sum, value) => sum + value);
+    return result > 0;
+  }
 
   changeModalHandler = () => {
     this.setState(state => ({showModal: !state.showModal}));
   }
 
   toTheCardHandler = () => {
-    let queryParams = [];
-
-    for(let i in this.props.ingredients) {
-      queryParams.push(encodeURIComponent(i) + "=" + encodeURIComponent(this.props.ingredients[i]));
-    }
-    queryParams.push("price=" + this.state.totalPrice);
-
-    this.props.history.push({
-      pathname: "/checkout",
-      search: "?" + queryParams.join("&"),
-    });
+    this.props.history.push("/checkout");
   }
 
   render() {
     let {ingredients, totalPrice} = this.props;
-    let {loading, showModal, purchaseState, error} = this.state;
+    let {loading, showModal, error} = this.state;
 
     if(error) {
       return <p>Can't get data from server. Reload the page later</p>
@@ -123,7 +83,7 @@ class BurgerBuilder extends React.Component {
           ingredients={ingredients}
           disabled={disabledButtons}
           price={totalPrice}
-          purchasable={purchaseState}
+          purchasable={this.checkPurchaseState()}
           addModal={this.changeModalHandler}/>
       </React.Fragment>
     )
@@ -137,7 +97,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const dispatchFunctions = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     addIngredientHandler: (ingredientType) => dispatch({
       type: actions.ADD_INGREDIENT, 
@@ -150,4 +110,4 @@ const dispatchFunctions = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, dispatchFunctions)(withError(BurgerBuilder, ordersAjax));
+export default connect(mapStateToProps, mapDispatchToProps)(withError(BurgerBuilder, ordersAjax));

@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 
 import Button from "../../../components/UI/Button/Button";
 import ordersAjax from "../../../utils/ajax-requests/orders-ajax";
@@ -209,7 +210,7 @@ class ContactData extends React.Component {
       content = (
         <React.Fragment>
           <h3 className="contact-data__title">Enter your contact data</h3>
-          <form className="contact-data__form" onSubmit={this.formSubmittingHandler} ref={this.formRef}>
+          <form className="contact-data__form" onSubmit={this.formSubmittingHandler}>
             {fields}
             <Button 
               label="Order" 
@@ -232,4 +233,11 @@ class ContactData extends React.Component {
   }
 }
 
-export default withError(ContactData, ordersAjax);
+const mapStateToProps = (state) => {
+  return {
+    ingredients: state.ingredients,
+    totalPrice: state.totalPrice
+  }
+}
+
+export default connect(mapStateToProps)(withError(ContactData, ordersAjax));

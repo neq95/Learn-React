@@ -8,12 +8,14 @@ const CheckoutItem = (props) => {
   let [name, quantity] = props.ingredient;
   return (
     <div className="checkout-item">
-      <p className="checkout-item__name">{capitalize(name)}</p>
+      <p className="checkout-item__name">{name}</p>
       <div className="ckeckout-item__counter checkout-counter">
         <Counter
           reduceClassName="checkout-counter__control"
           quantity={quantity}
           addClassName="checkout-counter__control"
+          add={() => props.addIngredient(name)}
+          reduce={() => props.removeIngredient(name)}
         />
       </div>
       <div className="checkout-item__price">{toFixed(props.price * quantity)}</div>
