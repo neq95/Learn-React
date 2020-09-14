@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 
 import BurgerPreview from "../../components/BurgerPreview/BurgerPreview";
 import BurgerControls from "../../components/BurgerPreview/BurgerControls/BurgerControls";
@@ -7,61 +8,60 @@ import OrderSummary from "../../components/BurgerPreview/OrderSummary/OrderSumma
 import Spinner from "../../components/UI/Spinner/Spinner";
 import ordersAjax from "../../utils/ajax-requests/orders-ajax";
 import withError from "../../hoc/withError";
+import * as actions from "../../store/actions/actions";
 
 class BurgerBuilder extends React.Component {
   state = {
-    ingredients: {},
-    totalPrice: 2.1,
     purchaseState: false,
     showModal: false,
     loading: false,
     error: false
   }
 
-  componentDidMount() {
-    ordersAjax.getData("/ingredients.json")
-      .then(data => {
-        this.setState({
-          ingredients: data
-        })
-      }).catch(() => {
-        this.setState({error: true})
-      });
-  }
+  // componentDidMount() {
+  //   ordersAjax.getData("/ingredients.json")
+  //     .then(data => {
+  //       this.setState({
+  //         ingredients: data
+  //       })
+  //     }).catch(() => {
+  //       this.setState({error: true})
+  //     });
+  // }
 
-  checkPurchaseState = ingredients => {
-    let result = Object.values(ingredients).reduce((sum, value) => sum + value);
-    return result > 0;
-  }
+  // checkPurchaseState = ingredients => {
+  //   let result = Object.values(ingredients).reduce((sum, value) => sum + value);
+  //   return result > 0;
+  // }
 
-  addIngredientHandler = type => {
-    let ingredients = { ...this.state.ingredients};
-    ingredients[type]++;
+  // addIngredientHandler = type => {
+  //   let ingredients = { ...this.state.ingredients};
+  //   ingredients[type]++;
 
-    let totalPrice = this.state.totalPrice;
-    totalPrice += this.props.ingredientCost[type];
+  //   let totalPrice = this.state.totalPrice;
+  //   totalPrice += this.props.ingredientCost[type];
 
-    let purchaseState = this.checkPurchaseState(ingredients);
+  //   let purchaseState = this.checkPurchaseState(ingredients);
   
-    this.setState({ingredients, 
-      totalPrice: Math.round(totalPrice * 100) / 100, 
-      purchaseState})
-  }
+  //   this.setState({ingredients, 
+  //     totalPrice: Math.round(totalPrice * 100) / 100, 
+  //     purchaseState})
+  // }
 
-  removeIngredientHandler = type => {
-    let ingredients = {...this.state.ingredients};
-    if(ingredients[type] === 0) return;
+  // removeIngredientHandler = type => {
+  //   let ingredients = {...this.state.ingredients};
+  //   if(ingredients[type] === 0) return;
 
-    let totalPrice = this.state.totalPrice;
-    ingredients[type]--;
-    totalPrice -= this.props.ingredientCost[type];
+  //   let totalPrice = this.state.totalPrice;
+  //   ingredients[type]--;
+  //   totalPrice -= this.props.ingredientCost[type];
 
-    let purchaseState = this.checkPurchaseState(ingredients);
+  //   let purchaseState = this.checkPurchaseState(ingredients);
 
-    this.setState({ingredients, 
-      totalPrice: Math.round(totalPrice * 100) / 100,
-      purchaseState});
-  }
+  //   this.setState({ingredients, 
+  //     totalPrice: Math.round(totalPrice * 100) / 100,
+  //     purchaseState});
+  // }
 
   changeModalHandler = () => {
     this.setState(state => ({showModal: !state.showModal}));
@@ -70,8 +70,8 @@ class BurgerBuilder extends React.Component {
   toTheCardHandler = () => {
     let queryParams = [];
 
-    for(let i in this.state.ingredients) {
-      queryParams.push(encodeURIComponent(i) + "=" + encodeURIComponent(this.state.ingredients[i]));
+    for(let i in this.props.ingredients) {
+      queryParams.push(encodeURIComponent(i) + "=" + encodeURIComponent(this.props.ingredients[i]));
     }
     queryParams.push("price=" + this.state.totalPrice);
 
@@ -79,32 +79,11 @@ class BurgerBuilder extends React.Component {
       pathname: "/checkout",
       search: "?" + queryParams.join("&"),
     });
-
-    // this.setState({loading: true});
-
-    // let body = {
-    //   ingredients: this.state.ingredients, 
-    //   price: this.state.totalPrice.toFixed(2),
-    //   customer: {
-    //     name: "Tanuha",
-    //     address: {
-    //       country: "Russia",
-    //       city: "Voronezh",
-    //       street: "Lizukova",
-    //       house: 8
-    //     },
-    //     email: "tanuha@test.ru"
-    //   },
-    //   deliveryMethod: "fastest"
-    // }
-
-    // ordersAjax.postData("/orders.json", body)
-    //   .then(data => console.log(data))
-    //   .finally(() => this.setState({loading: false, showModal: false}));
   }
 
   render() {
-    let {ingredients, loading, totalPrice, showModal, purchaseState, error} = this.state;
+    let {ingredients, totalPrice} = this.props;
+    let {loading, showModal, purchaseState, error} = this.state;
 
     if(error) {
       return <p>Can't get data from server. Reload the page later</p>
@@ -139,8 +118,8 @@ class BurgerBuilder extends React.Component {
         </Modal>
         <BurgerPreview ingredients={ingredients} />
         <BurgerControls 
-          addIngredient={this.addIngredientHandler}
-          removeIngredient={this.removeIngredientHandler}
+          addIngredient={this.props.addIngredientHandler}
+          removeIngredient={this.props.removeIngredientHandler}
           ingredients={ingredients}
           disabled={disabledButtons}
           price={totalPrice}
@@ -151,4 +130,24 @@ class BurgerBuilder extends React.Component {
   }
 }
 
-export default withError(BurgerBuilder, ordersAjax);
+const mapStateToProps = (state) => {
+  return {
+    ingredients: state.ingredients,
+    totalPrice: state.totalPrice
+  }
+}
+
+const dispatchFunctions = (dispatch) => {
+  return {
+    addIngredientHandler: (ingredientType) => dispatch({
+      type: actions.ADD_INGREDIENT, 
+      payload: {ingredientType}
+    }),
+    removeIngredientHandler: (ingredientType) => dispatch({
+      type: actions.REMOVE_INGREDIENT,
+      payload: {ingredientType}
+    })
+  }
+}
+
+export default connect(mapStateToProps, dispatchFunctions)(withError(BurgerBuilder, ordersAjax));
