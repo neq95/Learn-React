@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import CheckoutView from "../../components/CheckoutView/CheckoutView";
 import Button from "../../components/UI/Button/Button";
 import ContactData from "./ContactData/ContactData";
-import * as actions from "../../store/actions/actions";
+import * as actions from "../../store/actions";
 
 import "./Checkout.css"
 
@@ -64,14 +64,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addIngredientHandler: (ingredientType) => dispatch({
-      type: actions.ADD_INGREDIENT,
-      payload: {ingredientType}
-    }),
-    removeIngredientHandler: (ingredientType) => dispatch({
-      type: actions.REMOVE_INGREDIENT,
-      payload: {ingredientType}
-    })
+    addIngredientHandler: (ingredientType) => dispatch(actions.addIngredient(ingredientType)),
+    removeIngredientHandler: (ingredientType) => dispatch(actions.removeIngredient(ingredientType))
   }
 }
 

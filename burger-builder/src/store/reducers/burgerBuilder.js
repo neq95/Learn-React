@@ -1,12 +1,7 @@
-import * as actions from "../actions/actions";
+import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
-  ingredients: {
-    meat: 0,
-    cheese: 0,
-    bacon: 0,
-    salad: 0
-  },
+  ingredients: {},
   totalPrice: 2.1,
   disabledButtons: {
     meat: true,
@@ -14,7 +9,8 @@ const initialState = {
     bacon: true,
     salad: true
   },
-  purchaseState: false
+  purchaseState: false,
+  error: false
 }
 
 const INGREDIENTS_PRICE = {
@@ -32,14 +28,14 @@ function checkPurchaseState(ingredients) {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actions.ADD_INGREDIENT:
-    case actions.REMOVE_INGREDIENT:
+    case actionTypes.ADD_INGREDIENT:
+    case actionTypes.REMOVE_INGREDIENT:
       let ingredientType = action.payload.ingredientType;
 
       let ingredients = {...state.ingredients};
       let totalPrice = state.totalPrice;
 
-      if(action.type === actions.ADD_INGREDIENT) {
+      if(action.type === actionTypes.ADD_INGREDIENT) {
         ingredients[ingredientType]++;
         totalPrice +=  INGREDIENTS_PRICE[ingredientType];
       } else {
@@ -58,6 +54,18 @@ const reducer = (state = initialState, action) => {
         disabledButtons,
         purchaseState: checkPurchaseState(ingredients)
       };
+
+    case actionTypes.FETCH_INGREDIENTS_FAILED:
+      return {
+        ...state,
+        error: true
+      }
+
+    case actionTypes.SET_INGREDIENTS:
+      return {
+        ...state,
+        ingredients: action.ingredients
+      }
 
     default:
       return state;
