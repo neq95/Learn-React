@@ -64,7 +64,7 @@ class BurgerBuilder extends React.Component {
           ingredients={ingredients}
           disabled={this.props.disabledButtons}
           price={totalPrice}
-          purchasable={this.props.purchasable}
+          purchasable={this.props.purchaseState}
           addModal={this.changeModalHandler}/>
       </React.Fragment>
     )
@@ -73,11 +73,7 @@ class BurgerBuilder extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    totalPrice: state.totalPrice,
-    disabledButtons: state.disabledButtons,
-    purchasable: state.purchaseState,
-    error: state.error
+    ...state.burgerBuilder
   }
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import {Route} from "react-router-dom";
+import {Route, Redirect} from "react-router-dom";
 import {connect} from "react-redux";
 
 import CheckoutView from "../../components/CheckoutView/CheckoutView";
@@ -20,16 +20,29 @@ class Checkout extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    let {
+      ingredients, 
+      totalPrice, 
+      ingredientsPrice,
+      addIngredientHandler,
+      removeIngredientHandler,
+      disabledButtons,
+      purchasable
+    } = this.props;
+
+    if(Object.keys(ingredients).length === 0) {
+      return <Redirect to="/" />
+    }
+
     return (
       <div className="checkout">
         <CheckoutView 
-          ingredients={this.props.ingredients} 
-          totalPrice={this.props.totalPrice}
-          ingredientsPrice={this.props.ingredientsPrice}
-          addIngredient={this.props.addIngredientHandler}
-          removeIngredient={this.props.removeIngredientHandler}
-          disabledButtons={this.props.disabledButtons}
+          ingredients={ingredients} 
+          totalPrice={totalPrice}
+          ingredientsPrice={ingredientsPrice}
+          addIngredient={addIngredientHandler}
+          removeIngredient={removeIngredientHandler}
+          disabledButtons={disabledButtons}
         />
         <div className="checkout__buttons">
           <Button 
@@ -41,7 +54,7 @@ class Checkout extends React.Component {
             label="Submit" 
             className="button button--submit"
             clicked={this.submitHandler}
-            disabled={!this.props.purchasable}
+            disabled={!purchasable}
           />
         </div>
         <Route 
@@ -55,10 +68,10 @@ class Checkout extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    totalPrice: state.totalPrice,
-    disabledButtons: state.disabledButtons,
-    purchasable: state.purchaseState
+    ingredients: state.burgerBuilder.ingredients,
+    totalPrice: state.burgerBuilder.totalPrice,
+    disabledButtons: state.burgerBuilder.disabledButtons,
+    purchasable: state.burgerBuilder.purchaseState
   }
 }
 

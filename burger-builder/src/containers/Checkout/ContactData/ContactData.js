@@ -1,12 +1,13 @@
 import React from "react";
 import {connect} from "react-redux";
 
+import "./ContactData.css";
 import Button from "../../../components/UI/Button/Button";
 import ordersAjax from "../../../utils/ajax-requests/orders-ajax";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import withError from "../../../hoc/withError";
 import FormField from "../../../components/UI/Forms/FormField/FormField";
-import "./ContactData.css";
+import * as actions from "../../../store/actions"
 
 class ContactData extends React.Component {
   state = {
@@ -97,21 +98,13 @@ class ContactData extends React.Component {
         }
       },
     },
-    loading: false,
     submitted: false,
     formIsValid: false
-  }
-
-  //Stop redirecting after form submit if an user change the page
-  componentWillUnmount() {
-    clearTimeout(this.timerID);
   }
 
   //Handler for submitted form: posting data to the server and redirecting to the main page
   formSubmittingHandler = (event) => {
     event.preventDefault();
-
-    this.setState({loading: true});
 
     function getFormValue(target) {
       let result = {};
@@ -122,20 +115,20 @@ class ContactData extends React.Component {
       return result;
     }
 
-    let body = {
+    let orderData = {
       ingredients: this.props.ingredients,
       totalPrice: this.props.totalPrice,
       deliveryDetails: getFormValue(this.state.formData)
     }
 
-    //posting order details to the server
-    ordersAjax.postData("/orders.json", body)
-      .then(() => {
-        this.setState({submitted: true});
-        this.timerID = setTimeout(() => this.props.history.push("/"), 3000)
-      })
-      .finally(() => this.setState({loading: false}))
+    this.props.makePurchase(orderData)
   }
+
+   //Stop redirecting after form submit if the user changed the page
+   componentWillUnmount() {
+    clearTimeout(this.timerID);
+  }
+
 
   //React to input change and mutate state by deep cloning
   inputChangeHandler = (event) => {
@@ -186,9 +179,10 @@ class ContactData extends React.Component {
 
   render() {
     let formData = this.state.formData;
+    let {loading} = this.props;
 
     let content = <Spinner />;
-    if(!(this.state.loading || this.state.submitted)) {
+    if(!(loading || this.state.submitted)) {
       let fields = Object.entries(formData).map(el => {
         return (
           <FormField 
@@ -205,7 +199,7 @@ class ContactData extends React.Component {
         )
       })
 
-      let buttonDisabled = this.state.loading || !this.state.formIsValid ? true : false;
+      let buttonDisabled = loading || !this.state.formIsValid ? true : false;
 
       content = (
         <React.Fragment>
@@ -235,9 +229,16 @@ class ContactData extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    totalPrice: state.totalPrice
+    ingredients: state.burgerBuilder.ingredients,
+    totalPrice: state.burgerBuilder.totalPrice,
+    loading: state.order.loading
   }
 }
 
-export default connect(mapStateToProps)(withError(ContactData, ordersAjax));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    makePurchase: (orderData) => dispatch(actions.makePurchase(orderData)) 
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withError(ContactData, ordersAjax));
