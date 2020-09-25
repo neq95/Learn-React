@@ -5,5 +5,6 @@ export {
 } from "./burgerBuilder";
 
 export {
-  makePurchase
+  makePurchase,
+  resetPurchaseUI
 } from "./order";

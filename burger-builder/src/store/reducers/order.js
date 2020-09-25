@@ -3,7 +3,8 @@ import * as actionTypes from "../actions/actionTypes";
 const initialState = {
   orders: [],
   error: false,
-  loading: false
+  loading: false,
+  submitted: false
 }
 
 const orderReducer = (state = initialState, action) => {
@@ -25,7 +26,8 @@ const orderReducer = (state = initialState, action) => {
       return {
         ...state,
         orders,
-        loading: false
+        loading: false,
+        submitted: true
       }
     
     case actionTypes.PURCHASE_FAIL:
@@ -33,6 +35,13 @@ const orderReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: true
+      }
+
+    case actionTypes.RESET_PURCHASE_UI:
+      return {
+        ...state,
+        error: false,
+        submitted: false
       }
 
     default:

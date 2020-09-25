@@ -32,3 +32,9 @@ export const makePurchase = (orderData) => {
       .catch(() => dispatch(purchaseFail()));
   };
 };
+
+export const resetPurchaseUI = () => {
+  return {
+    type: actionTypes.RESET_PURCHASE_UI
+  }
+}

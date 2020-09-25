@@ -98,7 +98,6 @@ class ContactData extends React.Component {
         }
       },
     },
-    submitted: false,
     formIsValid: false
   }
 
@@ -121,14 +120,22 @@ class ContactData extends React.Component {
       deliveryDetails: getFormValue(this.state.formData)
     }
 
-    this.props.makePurchase(orderData)
+    this.props.makePurchase(orderData);
   }
 
    //Stop redirecting after form submit if the user changed the page
    componentWillUnmount() {
     clearTimeout(this.timerID);
+    this.props.resetPurchaseUI();
   }
 
+  //When order submitted, redirect to main page after 5 seconds 
+  componentDidUpdate(prevProps) {
+    if(prevProps.submitted !== this.props.submitted) {
+      console.log("update");
+      this.timerID = setTimeout(() => this.props.history.push("/"), 5000);
+    }
+  }
 
   //React to input change and mutate state by deep cloning
   inputChangeHandler = (event) => {
@@ -179,10 +186,11 @@ class ContactData extends React.Component {
 
   render() {
     let formData = this.state.formData;
-    let {loading} = this.props;
+    let {loading, submitted} = this.props;
 
     let content = <Spinner />;
-    if(!(loading || this.state.submitted)) {
+
+    if(!(loading || submitted)) {
       let fields = Object.entries(formData).map(el => {
         return (
           <FormField 
@@ -231,13 +239,15 @@ const mapStateToProps = (state) => {
   return {
     ingredients: state.burgerBuilder.ingredients,
     totalPrice: state.burgerBuilder.totalPrice,
-    loading: state.order.loading
+    loading: state.order.loading,
+    submitted: state.order.submitted
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    makePurchase: (orderData) => dispatch(actions.makePurchase(orderData)) 
+    makePurchase: (orderData) => dispatch(actions.makePurchase(orderData)),
+    resetPurchaseUI: () => dispatch(actions.resetPurchaseUI())
   }
 }
 
